@@ -27,13 +27,11 @@ public class ShoppingCartApiService {
     public ShoppingCart putProductToBasket(Long id, Long  productId) {
         ShoppingCart currentBasket = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("ShoppingCart not found for id: " + id));
-        String productApi = "http://localhost:8080/api/products/getById/" + productId;
-
+        String productApi = "http://localhost:8082/api/products/getById/" + productId;
         Product product = restTemplate.getForObject(productApi, Product.class);
         currentBasket.getProductList().add(product);
-
-        repository.saveAndFlush(currentBasket);
-        return repository.saveAndFlush(currentBasket);
+        System.out.println(currentBasket.getProductList());
+        return repository.save(currentBasket);
 
     }
     public boolean delProductInBasket(Long basketId, Long productId){
